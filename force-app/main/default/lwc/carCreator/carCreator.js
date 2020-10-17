@@ -12,22 +12,15 @@ import CAR_TYPE from "@salesforce/schema/Car__c.Car_Type__c";
 import WORKER_TYPE from "@salesforce/schema/Car__c.Worker_Type__c";
 
 export default class CarCreator extends LightningElement {
-  objectApiName = CAR_OBJECT;
-  fields = [
-    CAR_NAME_FIELD,
-    CONTACT_FIELD,
-    BUILD_YEAR_FIELD,
-    PER_DAY_RENT_FIELD,
-    CAR_TYPE,
-    WORKER_TYPE
-  ];
+	objectApiName = CAR_OBJECT;
+	fields = [CAR_NAME_FIELD, CONTACT_FIELD, BUILD_YEAR_FIELD, PER_DAY_RENT_FIELD, CAR_TYPE, WORKER_TYPE];
 
-  handleSuccess(event) {
-    const toastEvent = new ShowToastEvent({
-      title: "Car created",
-      message: "Record ID: " + event.detail.id,
-      variant: "success"
-    });
-    this.dispatchEvent(toastEvent);
-  }
+	handleSuccess(event) {
+		const toastEvent = new ShowToastEvent({
+			title: "Car created",
+			message: "Record ID: " + event.detail.id,
+			variant: "success"
+		});
+		this.dispatchEvent(toastEvent);
+	}
 }
