@@ -13,7 +13,6 @@ import {
 import DrawInCanvas from "./drawInCanvas.js";
 
 let paint = null;
-
 export default class PaintApp extends LightningElement {
 	TOOL_LINE_ICON = TOOL_LINE_ICON;
 	TOOL_RECTANGLE_ICON = TOOL_RECTANGLE_ICON;
@@ -30,11 +29,11 @@ export default class PaintApp extends LightningElement {
 		let ctx = canvasElement.getContext("2d");
 
 		paint = new DrawInCanvas(this.template, canvasElement, ctx);
+		paint.activeTool = TOOL_LINE;
 
 		this.template.querySelectorAll("[data-tool]").forEach((el) => {
 			el.addEventListener("click", (e) => {
 				this.setSelectedItem(el);
-				//console.log(e.target.alt);
 
 				let selectedTool = el.getAttribute("data-tool");
 				paint.activeTool = selectedTool;
