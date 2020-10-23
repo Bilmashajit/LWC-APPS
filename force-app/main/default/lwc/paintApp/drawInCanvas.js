@@ -1,4 +1,3 @@
-import Point from "./point.js";
 import Utility from "./paintAppUtility.js";
 import { TOOL_LINE, TOOL_RECTANGLE, TOOL_CIRCLE, TOOL_TRIANGLE } from "./paintTool.js";
 export default class DrawInCanvas {
@@ -9,10 +8,15 @@ export default class DrawInCanvas {
 	startPos = null;
 	savedImage = null;
 	template = null;
+
 	constructor(template, canvasElement, ctx) {
 		this.template = template;
 		this.appCanvas = canvasElement;
 		this.appContext = ctx;
+		this.boundMouseDown = this.boundMouseDown.bind(this);
+		this.boundMouseMove = this.boundMouseMove.bind(this);
+		this.boundMouseUp = this.boundMouseUp.bind(this);
+
 		this.init();
 	}
 	set activeTool(tool) {
@@ -21,12 +25,9 @@ export default class DrawInCanvas {
 	}
 
 	init() {
-		this.appCanvas.addEventListener("mousedown", (e) => {
-			this.onMouseDown(e);
-		});
-		//this.appCanvas.onmousedown = (e) => this.onMouseDown(e);
+		this.appCanvas.addEventListener("mousedown", this.boundMouseDown);
 	}
-	onMouseDown(e) {
+	boundMouseDown(e) {
 		this.savedImage = this.appContext.getImageData(
 			0,
 			0,
@@ -34,19 +35,13 @@ export default class DrawInCanvas {
 			this.appContext.canvas.height
 		);
 
-		//doto:: add listener, to get moved coordinate
-		this.appCanvas.addEventListener("mousemove", (e) => {
-			this.onMouseMove(e);
-		});
-		this.template.addEventListener("mouseup", (e) => {
-			this.onMouseUp(e);
-		});
+		this.appCanvas.addEventListener("mousemove", this.boundMouseMove);
+		this.template.addEventListener("mouseup", this.boundMouseUp);
 
 		this.startPos = Utility.getMouseCoordsOnCanvas(this.appCanvas, e);
-		//console.log(this.startPos);
 	}
 
-	onMouseMove(e) {
+	boundMouseMove(e) {
 		this.currentPos = Utility.getMouseCoordsOnCanvas(this.appCanvas, e);
 
 		switch (this.tool) {
@@ -60,24 +55,9 @@ export default class DrawInCanvas {
 				break;
 		}
 	}
-	onMouseUp(e) {
-		//this.appCanvas.removeEventListener("mousemove", this.handleEvent.bind(this), false);
-
-		//doto::want to removed those listeners,after mouseup listener user can not draw anything.
-		this.appCanvas.removeEventListener(
-			"mousemove",
-			(e) => {
-				this.onMouseMove(e);
-			},
-			false
-		);
-		this.template.removeEventListener(
-			"mouseup",
-			(e) => {
-				this.onMouseUp(e);
-			},
-			false
-		);
+	boundMouseUp(e) {
+		this.appCanvas.removeEventListener("mousemove", this.boundMouseMove);
+		this.template.removeEventListener("mouseup", this.boundMouseUp);
 	}
 
 	drawShape() {
