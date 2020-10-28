@@ -23,10 +23,16 @@ export default class PaintApp extends LightningElement {
 	TOOL_RECTANGLE = TOOL_RECTANGLE;
 	TOOL_CIRCLE = TOOL_CIRCLE;
 	TOOL_TRIANGLE = TOOL_TRIANGLE;
+	initialRender = false;
 
 	renderedCallback() {
+		if (this.initialRender) return;
+
+		this.initialRender = true;
 		let canvasElement = this.template.querySelector("canvas");
 		let ctx = canvasElement.getContext("2d");
+
+		console.log("renderedCallback");
 
 		paint = new DrawInCanvas(this.template, canvasElement, ctx);
 		paint.activeTool = TOOL_LINE;
