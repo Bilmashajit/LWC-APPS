@@ -1,0 +1,34 @@
+<template>
+	<lightning-card>
+		<h3 slot="title">
+			<lightning-icon icon-name="standard:account" alternative-text="Event" size="small"></lightning-icon>
+			&nbsp;Insert Multiple Accounts
+		</h3>
+		<div slot="footer">
+			<lightning-button label="Add" variant="brand" onclick={addRow}> </lightning-button>&nbsp;
+			<lightning-button label="Save" variant="brand" onclick={saveMultipleAccounts}> </lightning-button>
+		</div>
+
+		<template if:true={picklistLevelDetails}>
+			<template for:each={picklistLevelDetails} for:item="item" for:index="index">
+				<lightning-combobox
+					key={item.apiName}
+					name={item.dataFilter}
+					label={item.label}
+					value={item.selectedValue}
+					data-filter={item.dataFilter}
+					data-index={index}
+					options={getParentDataSource}
+					onchange={handleChange}
+				></lightning-combobox>
+			</template>
+		</template>
+
+		<!-- <lightning-layout horizontal-align={horizontalAlign}>
+			<lightning-layout-item flexibility="auto" padding="around-small"> 1 </lightning-layout-item>
+			<lightning-layout-item flexibility="auto" padding="around-small"> 2 </lightning-layout-item>
+			<lightning-layout-item flexibility="auto" padding="around-small"> 3 </lightning-layout-item>
+			<lightning-layout-item flexibility="auto" padding="around-small"> 4 </lightning-layout-item>
+		</lightning-layout> -->
+	</lightning-card>
+</template>
