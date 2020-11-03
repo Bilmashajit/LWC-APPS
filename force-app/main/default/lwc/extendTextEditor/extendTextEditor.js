@@ -12,9 +12,9 @@ export default class ExtendTextEditor extends LightningElement {
 	initialRender = false;
 
 	@track snippetList = [
-		{ id: 1, tag: "#hwc", message: "Hello you are welcome to Bangladesh." },
-		{ id: 2, tag: "#lub", message: "Love you Bangladesh." },
-		{ id: 3, tag: "#hse", message: "Hello salesforce." }
+		{ id: 1, tag: "#s", message: "Salesforce" },
+		{ id: 2, tag: "#wt", message: "welcome to" },
+		{ id: 3, tag: "#b", message: "Bangladesh" }
 	];
 
 	COLUMNS = columns;
@@ -37,18 +37,17 @@ export default class ExtendTextEditor extends LightningElement {
 		const input = event.target.value;
 		this.story = input;
 
-		console.log("empty::", input.lastIndexOf("#"));
+		//console.log("empty::", input.lastIndexOf("#"));
 		const index = input.lastIndexOf("#");
 		if (index >= 0) {
 			this.isModalOpen = true;
 		}
 
 		this.setAllTextForChild();
-		console.log(input);
+		//console.log(input);
 	}
 
 	handleSnippetOnChange(event) {
-		//console.log("focus", this.template.querySelector("[data-id='selectId']"));
 		const regex = new RegExp(event.target.value, "gi");
 		this.data = this.snippetList.filter((row) => regex.test(row.tag));
 
@@ -92,7 +91,10 @@ export default class ExtendTextEditor extends LightningElement {
 	}
 
 	formatStory(message) {
-		this.story = this.story.slice(0, -1).concat(" " + message);
+		this.story = this.story
+			.slice(0, -1)
+			.concat(" " + message)
+			.trim();
 	}
 
 	refreshDataTable() {
