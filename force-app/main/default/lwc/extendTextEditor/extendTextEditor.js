@@ -6,7 +6,10 @@ const columns = [
 ];
 export default class ExtendTextEditor extends LightningElement {
 	story = "";
+	snippetTag = "";
+	snippetMessage = "";
 	data = [];
+	initialRender = false;
 
 	@track snippetList = [
 		{ id: 1, tag: "#hwc", message: "Hello you are welcome to Bangladesh." },
@@ -20,11 +23,16 @@ export default class ExtendTextEditor extends LightningElement {
 		this.data = [...this.snippetList];
 	}
 	renderedCallback() {
+		if (this.initialRender) return;
+
+		this.initialRender = true;
+
 		const inputArea = this.template.querySelector("lightning-textarea");
 		inputArea.focus();
 		const inputBox = this.template.querySelector("[data-id='selectId']");
 		inputBox.focus();
 	}
+
 	handleOnchange(event) {
 		const input = event.target.value;
 		this.story = input;
@@ -51,6 +59,23 @@ export default class ExtendTextEditor extends LightningElement {
 		console.log("child event fire");
 		const event = new CustomEvent("getalltext", { detail: this.story });
 		this.dispatchEvent(event);
+	}
+
+	handleSnippetTag(event) {
+		this.snippetTag = event.target.value;
+		console.log("snippetTag::", this.snippetTag);
+	}
+	handleSnippetMessage(event) {
+		this.snippetMessage = event.target.value;
+	}
+
+	handleAddSnippet(event) {
+		const currentSnippet = { id: this.snippetList + 1, tag: this.snippetTag, message: this.snippetMessage };
+		this.snippetList = [currentSnippet, ...this.snippetList];
+		this.refreshSearchSnippet();
+		this.refreshDataTable();
+		this.snippetMessage = "";
+		this.snippetTag = "";
 	}
 
 	getSelectedName(event) {

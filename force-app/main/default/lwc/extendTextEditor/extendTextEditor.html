@@ -52,6 +52,35 @@
 					<lightning-datatable key-field="id" data={data} columns={COLUMNS} onrowselection={getSelectedName}>
 					</lightning-datatable>
 				</div>
+
+				<footer class="slds-modal__footer">
+					<lightning-layout horizontal-align="spread" multiple-rows>
+						<lightning-layout-item size="2">
+							<lightning-input
+								type="text"
+								label="tag"
+								variant="label-hidden"
+								placeholder="Tag"
+								value={snippetTag}
+								onchange={handleSnippetTag}
+							></lightning-input>
+						</lightning-layout-item>
+						<lightning-layout-item size="8">
+							<lightning-input
+								type="text"
+								label="snippetMessage"
+								variant="label-hidden"
+								placeholder="Snippet Message"
+								value={snippetMessage}
+								onchange={handleSnippetMessage}
+							></lightning-input>
+						</lightning-layout-item>
+
+						<lightning-layout-item size="2">
+							<lightning-button variant="brand" label="Add" onclick={handleAddSnippet}></lightning-button>
+						</lightning-layout-item>
+					</lightning-layout>
+				</footer>
 			</div>
 		</section>
 		<div class={modalBackdropClass}></div>
