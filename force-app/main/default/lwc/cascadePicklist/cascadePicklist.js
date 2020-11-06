@@ -22,7 +22,7 @@ export default class CascadePicklist extends LightningElement {
 	@track picklistLevelDetails = [
 		// { apiName: "Account_Country__c", label: "Account Country", selectedValue: "", dataFilter: "parent" },
 		{
-			apiName: "AccountSource",
+			apiName: "A__c",
 			label: "Account Country",
 			selectedValue: "",
 			dataFilter: "parent",
@@ -30,9 +30,33 @@ export default class CascadePicklist extends LightningElement {
 			controlValues: []
 		},
 		//{ apiName: "Account_State__c", label: "Account State", selectedValue: "", dataFilter: "child" },
-		{ apiName: "Active__c", label: "Account State", selectedValue: "", dataFilter: "child" },
-		{ apiName: "City__c", label: "Account City", selectedValue: "", dataFilter: "grandChild" },
-		{ apiName: "Street__c", label: "Account Street", selectedValue: "", dataFilter: "grandGrandChild" }
+		{
+			apiName: "Account_State__c",
+			label: "Account State",
+			selectedValue: "",
+			dataFilter: "child",
+			dataSource: [],
+			controlValues: []
+		},
+		{
+			apiName: "CustomerPriority__c",
+			label: "Customer Priority",
+			selectedValue: "",
+			dataFilter: "grandChild",
+			dataSource: [],
+			controlValues: []
+		},
+		{
+			apiName: "SLA__c",
+			label: "SLA",
+			selectedValue: "",
+			dataFilter: "grandGrandChild",
+			dataSource: [],
+			controlValues: []
+		}
+
+		//{ apiName: "City__c", label: "Account City", selectedValue: "", dataFilter: "grandChild" },
+		//{ apiName: "Street__c", label: "Account Street", selectedValue: "", dataFilter: "grandGrandChild" }
 	];
 
 	get options() {
@@ -43,18 +67,29 @@ export default class CascadePicklist extends LightningElement {
 		];
 	}
 
+	datasourceIndex = 0;
 	get getParentDataSource() {
-		console.log("datasouce:::", this.picklistLevelDetails[0].dataSource);
-		return this.picklistLevelDetails[0].dataSource;
+		const data = this.picklistLevelDetails[this.datasourceIndex].dataSource;
+
+		console.log("getSomeValue", data);
+		this.datasourceIndex = this.datasourceIndex + 1;
+
+		return data ? data : [];
+		//return this.picklistLevelDetails[0].dataSource;
 	}
 
 	handleChange(event) {
 		const value = event.detail.value;
-
+		console.log("this.picklistLevelDetails.length", this.picklistLevelDetails.length);
 		const itemIndex = event.target.dataset.index;
-		const filterArray = this.picklistLevelDetails[itemIndex];
-
-		if (value) filterArray.selectedValue = value;
+		console.log(
+			"this.picklistLevelDetails.controlValues",
+			JSON.stringify(this.picklistLevelDetails[itemIndex + 1].controlValues)
+		);
+		if (itemIndex < this.picklistLevelDetails.length - 1 && value) {
+			//const filterArray = this.picklistLevelDetails[itemIndex + 1];
+			//filterArray.selectedValue = value;
+		}
 	}
 
 	// Account object info
@@ -71,15 +106,34 @@ export default class CascadePicklist extends LightningElement {
 			this.error = null;
 			this.allData = data;
 
-			const currentData = this.getCurrentPicklistValues(this.picklistLevelDetails[0].apiName);
-			const controlData = this.getCurrentPicklistControlValues(this.picklistLevelDetails[0].apiName);
-			const formatData = this.formatPicklistValues(currentData);
-			this.picklistLevelDetails[0].dataSource = formatData;
-			this.picklistLevelDetails[0].controlValues = controlData;
+			if (!data) return;
+
+			for (let index = 0; index < this.picklistLevelDetails.length; index++) {
+				console.log(
+					"this.allData.picklistFieldValues[apiName]",
+					this.allData.picklistFieldValues[this.picklistLevelDetails[index].apiName]
+				);
+				const currentData = this.getCurrentPicklistValues(this.picklistLevelDetails[index].apiName);
+				const formatData = this.formatPicklistValues(currentData);
+				this.picklistLevelDetails[index].dataSource = formatData;
+
+				let controlData = this.getCurrentPicklistControlValues(this.picklistLevelDetails[index].apiName);
+
+				this.formatPicklistControlValues(currentData, controlData);
+
+				// if (index !== 0 && index !== this.picklistLevelDetails.length - 1) {
+				// 	let controlData = this.getCurrentPicklistControlValues(
+				// 		this.picklistLevelDetails[index + 1].apiName
+				// 	);
+
+				// 	let temp = this.formatPicklistControlValues(currentData, controlData);
+
+				// 	//this.picklistLevelDetails[index].controlValues = temp;
+				// }
+			}
 			//const temp = data.picklistFieldValues[this.picklistLevelDetails[0].apiName].controllerValues;
 
-			console.log("controlValues:::", currentData);
-			console.log("totalDependentValues:::", formatData);
+			this.datasourceIndex = 0;
 		} else if (error) {
 			this.error = JSON.stringify(error);
 		}
@@ -99,5 +153,10 @@ export default class CascadePicklist extends LightningElement {
 			});
 		});
 		return options;
+	}
+
+	formatPicklistControlValues(currentData, controlData) {
+		console.log("currentData", currentData);
+		console.log("controlData", controlData);
 	}
 }
