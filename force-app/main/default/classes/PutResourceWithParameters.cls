@@ -17,6 +17,7 @@ global with sharing class ContactBasicResouce {
 		contact.FirstName = firstName;
 		contact.LastName = lastName;
 		contact.LeadSource = leadSource;
+		//contact.BirthDate = Date.parse(birthDate);
 
 		upsert contact;
 		//put contact;
