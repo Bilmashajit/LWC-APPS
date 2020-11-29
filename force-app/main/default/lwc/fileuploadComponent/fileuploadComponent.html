@@ -1,0 +1,29 @@
+<template>
+	<lightning-card title="File upload">
+		<div class="slds-m-around_medium">
+			<div class="slds-grid slds-wrap">
+				<div class="slds-col slds-large-size_6-of-12 slds-medium-size_6-of-12 slds-size_12-of-12">
+					<lightning-input
+						type="file"
+						accept=".xlsx, .xls, .csv, .doc, .docx, .pdf"
+						label="Attachment"
+						onchange={openfileUpload}
+					></lightning-input>
+				</div>
+				<div class="slds-col slds-large-size_6-of-12 slds-medium-size_6-of-12 slds-size_12-of-12">
+					<template if:true={fileData}>
+						<p>{fileData.filename}</p>
+					</template>
+				</div>
+			</div>
+		</div>
+
+		<lightning-button
+			variant="brand"
+			title="submit"
+			label="Submit"
+			class="slds-m-top_small"
+			onclick={handleClick}
+		></lightning-button>
+	</lightning-card>
+</template>
