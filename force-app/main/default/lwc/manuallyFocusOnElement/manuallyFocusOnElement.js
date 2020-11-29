@@ -8,10 +8,11 @@ export default class ManuallyFocusOnElement extends LightningElement {
 	}
 
 	setFocusOnElement(controlIdentity) {
-		setTimeout(() => {
+		let timer = window.setTimeout(() => {
 			const lControl = this.template.querySelector(controlIdentity);
 			lControl.focus();
 			console.log("constructor", lControl);
+			window.clearTimeout(timer);
 		});
 	}
 
