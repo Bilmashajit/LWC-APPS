@@ -4,7 +4,16 @@ import { refreshApex } from "@salesforce/apex";
 
 const COLUMN = [
 	{ label: "Account Name", fieldName: "Name", type: "text" },
-	{ label: "AnnualRevenue", fieldName: "AnnualRevenue", type: "currency" },
+	{
+		label: "AnnualRevenue",
+		fieldName: "AnnualRevenue",
+		type: "currency",
+		cellAttributes: {
+			class: { fieldName: "amountColor" },
+			iconName: { fieldName: "iconName" },
+			iconPosition: "right"
+		}
+	},
 	{ label: "Industry", fieldName: "Industry", type: "text" },
 	{ label: "Phone", fieldName: "Phone", type: "phone" }
 ];
@@ -28,8 +37,17 @@ export default class DataTableComponent extends LightningElement {
 		}
 
 		if (data) {
-			this.tableData = data;
-			console.log({ data });
+			this.tableData = data.map((item) => {
+				let amountColor = "";
+				let iconName = "";
+				if (item.AnnualRevenue) {
+					amountColor = item.AnnualRevenue < 50000 ? "slds-text-color_error" : "slds-text-color_success";
+					iconName = item.AnnualRevenue < 50000 ? "utility:down" : "utility:up";
+				}
+
+				return { ...item, amountColor: amountColor, iconName: iconName };
+			});
+			console.log(this.tableData);
 		} else if (error) {
 			console.log({ error });
 		}
