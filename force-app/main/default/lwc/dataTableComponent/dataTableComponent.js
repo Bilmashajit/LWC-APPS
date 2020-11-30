@@ -2,8 +2,17 @@ import { LightningElement, wire } from "lwc";
 import getAccounts from "@salesforce/apex/TableController.getAccounts";
 import { refreshApex } from "@salesforce/apex";
 
+const COLUMN = [
+	{ label: "Account Name", fieldName: "Name", type: "text" },
+	{ label: "AnnualRevenue", fieldName: "AnnualRevenue", type: "currency" },
+	{ label: "Industry", fieldName: "Industry", type: "text" },
+	{ label: "Phone", fieldName: "Phone", type: "phone" }
+];
+
 export default class DataTableComponent extends LightningElement {
 	accountsResponse;
+	columns = COLUMN;
+	tableData;
 
 	// * Setting processing variable to true initially
 	processing = true;
@@ -19,6 +28,7 @@ export default class DataTableComponent extends LightningElement {
 		}
 
 		if (data) {
+			this.tableData = data;
 			console.log({ data });
 		} else if (error) {
 			console.log({ error });

@@ -1,1 +1,7 @@
-<template> </template>
+<template>
+	<lightning-card title="Datatable styling in LWC">
+		<template if:true={tableData}>
+			<lightning-datatable data={tableData} columns={columns} key-field="Id"> </lightning-datatable>
+		</template>
+	</lightning-card>
+</template>
