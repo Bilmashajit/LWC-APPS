@@ -14,7 +14,12 @@ const COLUMN = [
 			iconPosition: "right"
 		}
 	},
-	{ label: "Industry", fieldName: "Industry", type: "text" },
+	{
+		label: "Industry",
+		fieldName: "Industry",
+		type: "text",
+		cellAttributes: { class: { fieldName: "industryColor" } }
+	},
 	{ label: "Phone", fieldName: "Phone", type: "phone" }
 ];
 
@@ -40,12 +45,16 @@ export default class DataTableComponent extends LightningElement {
 			this.tableData = data.map((item) => {
 				let amountColor = "";
 				let iconName = "";
+				let industryColor = "";
 				if (item.AnnualRevenue) {
 					amountColor = item.AnnualRevenue < 50000 ? "slds-text-color_error" : "slds-text-color_success";
 					iconName = item.AnnualRevenue < 50000 ? "utility:down" : "utility:up";
 				}
+				if (item.Industry) {
+					industryColor = "slds-icon-custom-custom33 slds-text-color_default";
+				}
 
-				return { ...item, amountColor: amountColor, iconName: iconName };
+				return { ...item, amountColor: amountColor, iconName: iconName, industryColor: industryColor };
 			});
 			console.log(this.tableData);
 		} else if (error) {
